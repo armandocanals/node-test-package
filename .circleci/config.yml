@@ -4,6 +4,11 @@
 #
 version: 2
 
+general:
+  branches:
+    only:
+     - circleci # list of branches to build
+
 jobs:
   build:
     docker:
@@ -11,12 +16,22 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - run:
-          name: Run specs
-          command: yarn test
+
+          # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+
       - run:
           name: Set registry URL
           command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
@@ -26,3 +41,32 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
+
+    deploy:
+      steps:
+        - run:
+            name: Set registry URL
+            command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
+        - run:
+            name: Authenticate with registry
+            command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+        - run:
+            name: Publish package
+            command: npm publish
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - checkout:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
