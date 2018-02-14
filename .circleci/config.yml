@@ -42,17 +42,17 @@ jobs:
           name: Publish package
           command: npm publish
 
-    deploy:
-      steps:
-        - run:
-            name: Set registry URL
-            command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
-        - run:
-            name: Authenticate with registry
-            command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-        - run:
-            name: Publish package
-            command: npm publish
+  deploy:
+    steps:
+      - run:
+          name: Set registry URL
+          command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
+      - run:
+          name: Authenticate with registry
+          command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
 
 workflows:
   version: 2
@@ -62,9 +62,8 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - build
       - deploy:
-          requires:
-            - build
           filters:
             branches:
               ignore: /.*/
