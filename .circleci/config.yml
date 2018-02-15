@@ -38,13 +38,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-  build:
-    steps:
-      - run:
-          name: Run specs
-          command: npm test
-
   deploy:
+    <<: *defaults
     steps:
       - run:
           name: Set registry URL
@@ -61,12 +56,9 @@ workflows:
   build-deploy:
     jobs:
       - checkout
-      - build:
-          requires:
-            - checkout
       - deploy:
           requires:
-            - build
+            - checkout
           filters:
             tags:
               only: /^v.*/
