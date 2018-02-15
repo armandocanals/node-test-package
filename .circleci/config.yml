@@ -37,6 +37,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+  defaults: &defaults
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.9.1
+
   build:
     <<: *defaults
     steps:
