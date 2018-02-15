@@ -37,6 +37,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   build:
+    <<: *defaults
     steps:
       - run:
           name: Run specs
@@ -48,6 +49,7 @@ jobs:
         ignore: /.*/
       tags:
         only: /^v.*/
+    <<: *defaults
     steps:
       - run:
           name: Set registry URL
