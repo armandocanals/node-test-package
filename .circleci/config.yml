@@ -9,11 +9,17 @@ general:
     only:
      - circleci # list of branches to build
 
+defaults: &defaults
+  machine:
+    services:
+      - docker
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.9.1
+
 jobs:
-  build:
-    docker:
-      - image: circleci/node:7.10
-    working_directory: ~/repo
+  checkout:
+    <<: *defaults  
     steps:
       - checkout
 
@@ -30,19 +36,20 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-
+  build:
+    <<: *defaults
+    steps:
       - run:
-          name: Set registry URL
-          command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
-      - run:
-          name: Authenticate with registry
-          command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-      - run:
-          name: Publish package
-          command: npm publish
+          name: Run specs
+          command: npm test
 
   deploy:
+    <<: *defaults
+    filters:
+      branches:
+        ignore: /.*/
+      tags:
+        only: /^v.*/
     steps:
       - run:
           name: Set registry URL
@@ -53,19 +60,3 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - checkout:
-          filters:
-            tags:
-              only: /.*/
-      - build
-      - deploy:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
