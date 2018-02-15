@@ -62,8 +62,12 @@ workflows:
   build-deploy:
     jobs:
       - checkout
-      - build
+      - build:
+          requires:
+            - checkout
       - deploy:
+          requires:
+            - build
           filters:
             tags:
               only: /^v.*/
