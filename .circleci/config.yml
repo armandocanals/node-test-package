@@ -37,10 +37,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - out
+
 
   deploy:
     <<: *defaults
@@ -53,7 +50,7 @@ jobs:
           command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publish package
-          command: npm publish
+          command: cd ~/repo; npm publish
 
 workflows:
   version: 2
