@@ -9,17 +9,15 @@ general:
     only:
      - circleci # list of branches to build
 
-defaults: &defaults
-  machine:
-    services:
-      - docker
+machine:
+  services:
+    - docker
   working_directory: ~/repo
   docker:
     - image: circleci/node:8.9.1
 
 jobs:
   checkout:
-    <<: *defaults  
     steps:
       - checkout
 
@@ -37,14 +35,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
   build:
-    <<: *defaults
     steps:
       - run:
           name: Run specs
           command: npm test
 
   deploy:
-    <<: *defaults
     filters:
       branches:
         ignore: /.*/
