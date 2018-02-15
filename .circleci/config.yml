@@ -71,7 +71,9 @@ workflows:
   build-deploy:
     jobs:
       - checkout
-      - test
+      - test:
+          requires:
+            - checkout
       - deploy:
           requires:
             - test
