@@ -38,10 +38,15 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
 
   deploy:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Set registry URL
           command: npm set registry https://packagecloud.io/armando/node-test-package/npm/
