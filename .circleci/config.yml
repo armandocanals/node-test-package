@@ -50,7 +50,9 @@ jobs:
           command: echo "//packagecloud.io/armando/node-test-package/npm/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publish package
-          command: cd ~/repo; npm publish
+          command: |
+            cd ~/repo
+            npm publish
 
 workflows:
   version: 2
