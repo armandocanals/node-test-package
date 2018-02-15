@@ -12,7 +12,7 @@ general:
 machine:
   services:
     - docker
-
+     
 defaults: &defaults
   working_directory: ~/repo
   docker:
@@ -20,9 +20,10 @@ defaults: &defaults
 
 jobs:
   checkout:
-    <<: *defaults
+    <<: *defaults  
     steps:
       - checkout
+
           # Download and cache dependencies
       - restore_cache:
           keys:
@@ -39,19 +40,11 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: ~/repo
-
       - run:
           name: Run specs
           command: npm test
 
   deploy:
-    filters:
-      branches:
-        ignore: /.*/
-      tags:
-        only: /^v.*/
     <<: *defaults
     steps:
       - run:
@@ -63,3 +56,14 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - checkout:
+          filters:
+            tags:
+              only: /.*/
+      - build
+      - deploy:
