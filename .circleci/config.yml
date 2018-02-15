@@ -46,6 +46,9 @@ jobs:
 
   deploy:
     <<: *defaults
+    filters:
+      tags:
+        only: /^v.*/
     steps:
       - run:
           name: Set registry URL
@@ -56,14 +59,3 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - checkout:
-          filters:
-            tags:
-              only: /.*/
-      - build
-      - deploy:
