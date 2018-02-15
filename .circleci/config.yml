@@ -12,7 +12,8 @@ general:
 machine:
   services:
     - docker
-  working_directory: ~/repo
+
+working_directory: ~/repo
   docker:
     - image: circleci/node:8.9.1
 
@@ -20,7 +21,6 @@ jobs:
   checkout:
     steps:
       - checkout
-
           # Download and cache dependencies
       - restore_cache:
           keys:
