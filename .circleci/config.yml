@@ -71,13 +71,10 @@ workflows:
   build-deploy:
     jobs:
       - checkout
-      - test:
-          requires:
-            - checkout
+      - test
       - deploy:
+          requires:
+            - test
           filters:
             tags:
               only: /^v.*/
-          requires:
-            - test
-
