@@ -65,9 +65,9 @@ jobs:
           command: |
             cd ~/repo
             npm publish
-      filters:
-        tags:
-          only: /^v*/
+    filters:
+      tags:
+        only: /^v*/
             
 workflows:
   version: 2
