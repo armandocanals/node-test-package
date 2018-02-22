@@ -63,12 +63,16 @@ workflows:
           filters:
             tags:
               only: /^v.*/      
+            branches:
+              only: circleci
       - test:
           requires:
             - checkout
           filters:
             tags:
               only: /^v.*/
+            branches:
+              only: circleci
       - deploy:
           requires:
             - test
@@ -76,4 +80,4 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only: master
+              only: circleci
