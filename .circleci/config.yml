@@ -65,7 +65,6 @@ workflows:
               only: /^v.*/      
             branches:
               only: circleci
-              ignore: /.*/
       - test:
           requires:
             - checkout
@@ -74,7 +73,6 @@ workflows:
               only: /^v.*/
             branches:
               only: circleci
-              ignore: /.*/
       - deploy:
           requires:
             - test
