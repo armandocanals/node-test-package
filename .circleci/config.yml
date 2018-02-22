@@ -62,17 +62,13 @@ workflows:
       - checkout:
           filters:
             tags:
-              only: /^v.*/      
-            branches:
-              ignore: /.*/
+              only: /^v.*/
       - test:
           requires:
             - checkout
           filters:
             tags:
               only: /^v.*/
-            branches:
-              ignore: /.*/
       - deploy:
           requires:
             - test
