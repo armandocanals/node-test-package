@@ -4,11 +4,6 @@
 #
 version: 2
 
-general:
-  branches:
-    only:
-     - circleci # list of branches to build
-     
 defaults: &defaults
   working_directory: ~/repo
   docker:
@@ -81,4 +76,5 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - circleci # list of branches to build
