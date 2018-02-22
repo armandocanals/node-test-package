@@ -15,11 +15,9 @@ jobs:
     steps:
       - checkout
 
-          # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
       - run: yarn install
@@ -55,25 +53,3 @@ jobs:
           name: Publish package
           command: npm publish
             
-workflows:
-  version: 2
-  test-deploy:
-    jobs:
-      - checkout:
-          filters:
-            tags:
-              only: /^v.*/
-      - test:
-          requires:
-            - checkout
-          filters:
-            tags:
-              only: /^v.*/
-      - deploy:
-          requires:
-            - test
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
