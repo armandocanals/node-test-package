@@ -8,10 +8,6 @@ general:
   branches:
     only:
      - circleci # list of branches to build
-
-machine:
-  services:
-    - docker
      
 defaults: &defaults
   working_directory: ~/repo
