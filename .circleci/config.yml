@@ -63,26 +63,15 @@ workflows:
           filters:
             tags:
               only: /^v.*/      
-          branches:
-            only:
-              - circleci # list of branches to build
-
       - test:
           requires:
             - checkout
           filters:
             tags:
               only: /^v.*/
-          branches:
-            only:
-              - circleci # list of branches to build
-
       - deploy:
           requires:
             - test
           filters:
             tags:
               only: /^v.*/
-            branches:
-              only:
-                - circleci # list of branches to build
